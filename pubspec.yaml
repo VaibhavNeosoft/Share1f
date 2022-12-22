@@ -33,8 +33,11 @@ dependencies:
   http: ^0.13.5
   image_picker: ^0.8.6
   path_provider: ^2.0.11
+  receive_sharing_intent: ^1.4.5
   share_extend: ^2.0.0
   share_plus: ^6.3.0
+  social_share: ^2.3.1
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_lints: ^2.0.0

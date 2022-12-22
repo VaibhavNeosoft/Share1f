@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-// import 'package:share_plus/share_plus.dart';
-import 'package:share_extend/share_extend.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:http/http.dart' as http;
+import 'package:onefdemo/share_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,10 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Share'),
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const SharePage(),
     );
   }
 }
@@ -41,48 +34,104 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+      body: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * 0.2,
+        ),
+        alignment: Alignment.center,
         child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Share',
-                style: TextStyle(fontSize: 18),
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    ByteData imageByte =
-                        await rootBundle.load('assets/mfasset.jpeg');
-                    final temp = await getTemporaryDirectory();
-                    final path = '${temp.path}/referLogo.jpeg';
-                    File(path).writeAsBytesSync(imageByte.buffer.asUint8List());
-                    ShareExtend.share(
-                      path,
-                      "image",
-                      extraText: "Hi, How are you?",
-                    );
-                  },
-                  child: const Text('With Image')),
-              ElevatedButton(
-                  onPressed: () => shareImage(),
-                  child: const Text('With Image URL')),
-            ]),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              'Share',
+              style: TextStyle(fontSize: 18),
+            ),
+            ElevatedButton(
+              onPressed: () => textWhatsApp(),
+              child: const Text('WhatsApp'),
+            ),
+            ElevatedButton(
+              onPressed: () => textTwitterPost('tweetPost'),
+              child: const Text('Twitter Post'),
+            ),
+            ElevatedButton(
+              onPressed: () => textTwitterPost('tweetDM'),
+              child: const Text('Twitter DM'),
+            ),
+            ElevatedButton(
+              onPressed: () => textLinkedIn(),
+              child: const Text('LinkedIn DM')
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Future shareImage() async {
-    var urls =
-        'https://pbs.twimg.com/profile_images/1583320829168742400/0nClIzSM_400x400.jpg';
-    final url = Uri.parse(urls);
-    final res = await http.get(url);
-    final bytes = res.bodyBytes;
-    final temp = await getTemporaryDirectory();
-    final path = '${temp.path}/imageToShare.jpg';
-    File(path).writeAsBytesSync(bytes);
-    await Share.shareFiles([path], text: 'Hi, How are you?');
+  Future textWhatsApp() async {
+    launchUrl(Uri.parse("whatsapp://send/?text='Hi, how are you?'"));
   }
+
+  Future textTwitterPost(String method) async {
+    var methodChannel = const MethodChannel('example.com/channel');
+
+    try {
+      var data = await methodChannel.invokeMethod(method);
+      print(' ###### main $data');
+    } on PlatformException catch (e) {
+      return "Failed to Invoke: '${e.message}'.";
+    }
+  }
+
+  Future textLinkedIn() async {
+    var methodChannel = const MethodChannel('example.com/channel');
+
+    try {
+      var data = await methodChannel.invokeMethod('linkedIn');
+      print(' ###### main $data');
+    } on PlatformException catch (e) {
+      return "Failed to Invoke: '${e.message}'.";
+    }
+  }
+
+  // Future withText() async {
+  //   Share.share("DEMO TEXT");
+  // }
+
+  // Future withImage() async {
+  //   ByteData imageByte = await rootBundle.load('assets/mfasset.jpeg');
+  //   final temp = await getTemporaryDirectory();
+  //   final path = '${temp.path}/referLogo.jpeg';
+  //   File(path).writeAsBytesSync(imageByte.buffer.asUint8List());
+  //   Share.shareFiles([path]);
+  // }
+
+  // Future withImageText() async {
+  //   ByteData imageByte = await rootBundle.load('assets/mfasset.jpeg');
+  //   final temp = await getTemporaryDirectory();
+  //   final path = '${temp.path}/referLogo.jpeg';
+  //   File(path).writeAsBytesSync(imageByte.buffer.asUint8List());
+  //   Share.shareFiles([path]);
+  //   await Share.shareFiles(
+  //     [path],
+  //     text: 'DEMO TEXT \n\nhttps://1finance.onelink.me/5Kxt/u1yi1ykq',
+  //   );
+  // }
+
+  // Future withImageURL() async {
+  //   var urls =
+  //       'https://pbs.twimg.com/profile_images/1583320829168742400/0nClIzSM_400x400.jpg';
+  //   final url = Uri.parse(urls);
+  //   final res = await http.get(url);
+  //   final bytes = res.bodyBytes;
+  //   final temp = await getTemporaryDirectory();
+  //   final path = '${temp.path}/imageToShare.jpg';
+  //   File(path).writeAsBytesSync(bytes);
+  //   await Share.shareFiles(
+  //     [path],
+  //     text: 'DEMO TEXT \n\nhttps://1finance.onelink.me/5Kxt/u1yi1ykq',
+  //   );
+  // }
 }
