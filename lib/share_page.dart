@@ -1,10 +1,6 @@
-import 'dart:io';
-
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:social_share/social_share.dart';
 
 class SharePage extends StatefulWidget {
   const SharePage({
@@ -30,24 +26,22 @@ class _SharePageState extends State<SharePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text(
-              'share_plus',
+              'Share Text Only',
               style: TextStyle(fontSize: 18),
             ),
+            const Divider(),
             ElevatedButton(
-              onPressed: () => callNative("tweetOnly"),
-              child: const Text('Tweet'),
+              onPressed: () => callNative("whatsapp"),
+              child: const Text('Whatsapp'),
             ),
             ElevatedButton(
-              onPressed: () => callNative("tweetPost"),
+              // onPressed: () => socialSharet(),
+              onPressed: () => callNative("tweet"),
               child: const Text('Tweet'),
             ),
             ElevatedButton(
               onPressed: () => callNative("linkedin"),
               child: const Text('Linkedin'),
-            ),
-            ElevatedButton(
-              onPressed: () => callNative("whatsapp"),
-              child: const Text('Whatsapp'),
             ),
           ],
         ),
@@ -56,8 +50,33 @@ class _SharePageState extends State<SharePage> {
   }
 }
 
+// iOSWhatsapp() {
+//   // launchUrl(Uri.parse("twitter://post?message=\(captionText)"))
+// // SocialShare.shareTwitter("This is Social Share plugin");
+//   SocialShare.shareWhatsapp("content");
+
+//   // var uri = "https://twitter.com/intent/tweet?url={url}&text={title}";
+//   // launchUrl(Uri.parse(uri));
+// }
+
+// calliOSLinkedin(String s) async {
+//   var methodChannel = const MethodChannel('1fin/share');
+
+//   try {
+//     var data = await methodChannel.invokeMethod(s);
+//     print(' ###### main $data');
+//   } on PlatformException catch (e) {
+//     return "Failed to Invoke: '${e.message}'.";
+//   }
+// }
+
+// socialSharet() {
+//   SocialShare.("captionText");
+//   // launchUrl(Uri.parse('http://www.twitter.com/messages/compose?text=fjsfnn'));
+// }
+
 callNative(String socialMedia) async {
-  var methodChannel = const MethodChannel('example.com/channel');
+  var methodChannel = const MethodChannel('1fin/share');
 
   try {
     var data = await methodChannel.invokeMethod(socialMedia);
@@ -67,41 +86,41 @@ callNative(String socialMedia) async {
   }
 }
 
-Future withText() async {
-  Share.share("DEMO TEXT");
-}
+// Future withText() async {
+//   Share.share("DEMO TEXT");
+// }
 
-Future withImage() async {
-  ByteData imageByte = await rootBundle.load('assets/mfasset.jpeg');
-  final temp = await getTemporaryDirectory();
-  final path = '${temp.path}/referLogo.jpeg';
-  File(path).writeAsBytesSync(imageByte.buffer.asUint8List());
-  Share.shareFiles([path]);
-}
+// Future withImage() async {
+//   ByteData imageByte = await rootBundle.load('assets/mfasset.jpeg');
+//   final temp = await getTemporaryDirectory();
+//   final path = '${temp.path}/referLogo.jpeg';
+//   File(path).writeAsBytesSync(imageByte.buffer.asUint8List());
+//   Share.shareFiles([path]);
+// }
 
-Future withImageText() async {
-  ByteData imageByte = await rootBundle.load('assets/mfasset.jpeg');
-  final temp = await getTemporaryDirectory();
-  final path = '${temp.path}/referLogo.jpeg';
-  File(path).writeAsBytesSync(imageByte.buffer.asUint8List());
-  Share.shareFiles([path]);
-  await Share.shareFiles(
-    [path],
-    text: 'DEMO TEXT \n\nhttps://1finance.onelink.me/5Kxt/u1yi1ykq',
-  );
-}
+// Future withImageText() async {
+//   ByteData imageByte = await rootBundle.load('assets/mfasset.jpeg');
+//   final temp = await getTemporaryDirectory();
+//   final path = '${temp.path}/referLogo.jpeg';
+//   File(path).writeAsBytesSync(imageByte.buffer.asUint8List());
+//   Share.shareFiles([path]);
+//   await Share.shareFiles(
+//     [path],
+//     text: 'DEMO TEXT \n\nhttps://1finance.onelink.me/5Kxt/u1yi1ykq',
+//   );
+// }
 
-Future withImageURL() async {
-  var urls =
-      'https://pbs.twimg.com/profile_images/1583320829168742400/0nClIzSM_400x400.jpg';
-  final url = Uri.parse(urls);
-  final res = await http.get(url);
-  final bytes = res.bodyBytes;
-  final temp = await getTemporaryDirectory();
-  final path = '${temp.path}/imageToShare.jpg';
-  File(path).writeAsBytesSync(bytes);
-  await Share.shareFiles(
-    [path],
-    text: 'DEMO TEXT \n\nhttps://1finance.onelink.me/5Kxt/u1yi1ykq',
-  );
-}
+// Future withImageURL() async {
+//   var urls =
+//       'https://pbs.twimg.com/profile_images/1583320829168742400/0nClIzSM_400x400.jpg';
+//   final url = Uri.parse(urls);
+//   final res = await http.get(url);
+//   final bytes = res.bodyBytes;
+//   final temp = await getTemporaryDirectory();
+//   final path = '${temp.path}/imageToShare.jpg';
+//   File(path).writeAsBytesSync(bytes);
+//   await Share.shareFiles(
+//     [path],
+//     text: 'DEMO TEXT \n\nhttps://1finance.onelink.me/5Kxt/u1yi1ykq',
+//   );
+// }
