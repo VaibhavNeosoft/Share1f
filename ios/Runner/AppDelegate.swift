@@ -23,10 +23,11 @@ import Flutter
           
          if(call.method=="whatsapp"){
 //             let whatsappURL = URL(string: (urlWhats as String).addingPercentEscapes(using: .utf8) ?? "")
-             let urlWhats = "whatsapp://send?text=\("This is my text to send.")"
-             let whatsappURL=URL(string:  urlWhats)
-             if (UIApplication.shared.canOpenURL(whatsappURL!)) {
-                 UIApplication.shared.openURL(whatsappURL!)
+             let content = "This is my text to send."
+             let urlWhats = "whatsapp://send?text=\(content)"
+             let whatsappURL=URL(string:  (urlWhats as String).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+             if (UIApplication.shared.canOpenURL(whatsappURL)) {
+                 UIApplication.shared.openURL(whatsappURL)
                  result("success")
              } else {
                  result("error")
@@ -34,9 +35,9 @@ import Flutter
              //
          }else if(call.method=="tweet"){
  let urlWhats = "twitter://post?message=\("This is my text to send.")"
-             let whatsappURL=URL(string:  urlWhats)
-             if (UIApplication.shared.canOpenURL(whatsappURL!)) {
-                 UIApplication.shared.openURL(whatsappURL!)
+             let whatsappURL=URL(string:  (urlWhats as String).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+             if (UIApplication.shared.canOpenURL(whatsappURL)) {
+                 UIApplication.shared.openURL(whatsappURL)
                  result("success")
              } else {
                  result("error")
