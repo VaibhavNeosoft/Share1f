@@ -55,5 +55,7 @@
 	<string>whatsapp</string>
     <string>tg</string>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>

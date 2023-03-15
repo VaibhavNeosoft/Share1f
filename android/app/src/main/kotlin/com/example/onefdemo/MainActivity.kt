@@ -21,11 +21,12 @@ class MainActivity : FlutterActivity() {
             flutterEngine.dartExecutor.binaryMessenger,
             "1fin/share"
         ).setMethodCallHandler { call, result ->
+            var text: String?  = call.argument("text")
             if (call.method == "tweet") {
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+                shareIntent.putExtra(Intent.EXTRA_TEXT, text)
                 shareIntent.setPackage("com.twitter.android")
                 val tweet = Intent(Intent.ACTION_VIEW)
                 startActivity(shareIntent)
@@ -33,14 +34,14 @@ class MainActivity : FlutterActivity() {
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+                shareIntent.putExtra(Intent.EXTRA_TEXT, text)
                 shareIntent.setPackage("com.linkedin.android")
                 startActivity(shareIntent)
             } else if (call.method == "whatsapp") {
                 val shareIntent = Intent()
                 shareIntent.action = Intent.ACTION_SEND
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+                shareIntent.putExtra(Intent.EXTRA_TEXT,text)
                 shareIntent.setPackage("com.whatsapp")
                 startActivity(shareIntent)
             }

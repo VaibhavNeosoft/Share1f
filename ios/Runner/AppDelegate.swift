@@ -20,33 +20,41 @@ import Flutter
           //     return
           //   }
           // self.shareTextData(result: result)
-          
+         var shareText = ""
+         if let args = call.arguments as? Dictionary<String, Any>,
+           let text = args["text"] as? String {
+             shareText=text
+           result(nil)
+         } else {
+           result(FlutterError.init(code: "errorSetDebug", message: "data or format error", details: nil))
+         }
+         
          if(call.method=="whatsapp"){
 //             let whatsappURL = URL(string: (urlWhats as String).addingPercentEscapes(using: .utf8) ?? "")
-             let content = "This is my text to send."
-             let urlWhats = "whatsapp://send?text=\(content)"
-             let whatsappURL=URL(string:  (urlWhats as String).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+//             let content = shareText
+             let urlWhats = "whatsapp://send?text=\(shareText)"
+             let whatsappURL=URL(string:  (urlWhats as String).addingPercentEncoding(withAllowedCharacters: .urlAllowedCharacters)!)!
              if (UIApplication.shared.canOpenURL(whatsappURL)) {
-                 UIApplication.shared.openURL(whatsappURL)
+                 UIApplication.shared.open(whatsappURL)
                  result("success")
              } else {
                  result("error")
              }
              //
          }else if(call.method=="tweet"){
- let urlWhats = "twitter://post?message=\("This is my text to send.")"
-             let whatsappURL=URL(string:  (urlWhats as String).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+ let urlWhats = "twitter://post?message=\(shareText)"
+             let whatsappURL=URL(string:  (urlWhats as String).addingPercentEncoding(withAllowedCharacters: .urlAllowedCharacters)!)!
              if (UIApplication.shared.canOpenURL(whatsappURL)) {
-                 UIApplication.shared.openURL(whatsappURL)
+                 UIApplication.shared.open(whatsappURL)
                  result("success")
              } else {
                  result("error")
              }
          }else if(call.method=="linkedin"){
- let urlWhats = "https://www.linkedin.com/shareArticle?mini=true&url=https://www.google.com/"
+ let urlWhats = "https://www.linkedin.com/shareArticle?mini=true&url=https://1finance.co.in/"
              let whatsappURL=URL(string:  urlWhats)
              if (UIApplication.shared.canOpenURL(whatsappURL!)) {
-                 UIApplication.shared.openURL(whatsappURL!)
+                 UIApplication.shared.open(whatsappURL!)
                  result("success")
              } else {
                  result("error")
@@ -129,3 +137,15 @@ let urlSchemeSend = URL(string: urlTextEscaped ?? "")
           
     }
 
+extension CharacterSet {
+    
+    /// Characters valid in part of a URL.
+    ///
+    /// This set is useful for checking for Unicode characters that need to be percent encoded before performing a validity check on individual URL components.
+    static var urlAllowedCharacters: CharacterSet {
+        // You can extend any character set you want
+        var characters = CharacterSet.urlQueryAllowed
+        characters.subtract(CharacterSet(charactersIn: "+"))
+        return characters
+    }
+}
