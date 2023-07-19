@@ -1,0 +1,16 @@
+1
+00:00:00,000 --> 00:00:01,500
+Welcome to the world of butterflies!
+
+2
+00:00:01,700 --> 00:00:03,700
+Witness their majestic colors in flight.
+
+3
+00:00:03,900 --> 00:00:05,800
+Behold the delicate beauty they carry.
+
+4
+00:00:05,800 --> 00:00:07,000
+Marvel at their mesmerizing patterns.
+
